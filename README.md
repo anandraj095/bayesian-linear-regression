@@ -1,167 +1,105 @@
-# Bayesian Linear Regression on California Housing Dataset
+# Bayesian Modeling with PyMC
 
 ## 📌 Overview
 
-This project implements a **Bayesian Linear Regression model** using PyMC on the California Housing dataset. The goal is to move beyond point estimates and capture **uncertainty in predictions**, followed by a rigorous **Bayesian model criticism workflow**.
+This repository contains a collection of **Bayesian modeling experiments and prototypes** built using PyMC.  
+The goal is to develop a strong understanding of probabilistic modeling, inference, and model criticism, while also exploring more advanced topics such as **spatial modeling (BYM2)**.
 
 ---
 
-## ⚙️ Model Description
+## 📂 Repository Structure
 
-* Likelihood: Gaussian
-* Priors: Weakly informative priors on coefficients
-* Inference: NUTS (Hamiltonian Monte Carlo)
-* Framework: PyMC + ArviZ
+### 🔹 Core Bayesian Regression
 
----
+- `01_gaussian_linear_regression.ipynb`  
+  Bayesian Linear Regression with Gaussian likelihood on the California Housing dataset.
 
-## 🚀 Workflow
-
-1. Data preprocessing and scaling
-2. Model specification
-3. Posterior sampling using NUTS
-4. Posterior predictive sampling
-5. Model evaluation and criticism
+- `02_student_t_likelihood.ipynb`  
+  Extension of the regression model using a **Student-T likelihood** to handle heavy-tailed noise and outliers.
 
 ---
 
-## 📊 Results
+### 🔹 Spatial Modeling Prototype (GSoC Preparation)
 
-* The model successfully learns relationships between features and house prices
-* Posterior distributions provide uncertainty estimates for all parameters
-* Predictions are reasonable but show limitations in capturing complex patterns
+- `bym2_minimal_prototype.ipynb`  
+  A minimal prototype of a **BYM2-style spatial model** using PyMC.
 
----
+  This notebook demonstrates:
+  - Structured + unstructured spatial decomposition
+  - Use of ICAR priors for spatial dependence
+  - Comparison with a baseline iid model
+  - Basic validation on synthetic areal count data
 
-# 🔍 Bayesian Model Criticism
-
-This section evaluates how well the model represents the data-generating process.
-
----
-
-## 1. Posterior Predictive Checks (PPC)
-
-Posterior predictive samples were generated and compared against the observed data.
-
-### Observations:
-
-* The overall distribution of simulated data roughly matches the real data
-* Mean predictions are close to observed values
-* However, discrepancies appear in the **tails of the distribution**, indicating the model struggles with extreme house prices
-
-👉 **Conclusion:**
-The model captures central tendencies but fails to fully represent variability in the data.
+  👉 This notebook was created as part of my **GSoC 2026 proposal for PyMC (Spatial Modeling)**.
 
 ---
 
-## 2. Residual Analysis
+## ⚙️ Tech Stack
 
-Residuals were computed as:
-
-residual = y_true - y_pred
-
-### Observations:
-
-* Residual plots show **structured patterns**, not purely random scatter
-* Evidence of **non-linearity** in the relationship between features and target
-* Variance of residuals is not constant (heteroscedasticity)
-
-👉 **Conclusion:**
-The linearity assumption is violated, and the model is likely underfitting complex relationships.
+- Python
+- PyMC
+- ArviZ
+- NumPy / SciPy
+- Matplotlib
 
 ---
 
-## 3. Normality of Residuals
+## 🚀 Workflow (General)
 
-A Q-Q plot was used to compare residuals with a normal distribution.
+Across notebooks, the typical workflow includes:
 
-### Observations:
-
-* Residuals deviate from normality, especially in the tails
-* Indicates presence of **outliers or heavy-tailed behavior**
-
-👉 **Conclusion:**
-The Gaussian likelihood assumption may not be appropriate.
+1. Data preprocessing and scaling  
+2. Model specification  
+3. Posterior sampling using NUTS (HMC)  
+4. Posterior predictive checks  
+5. Model evaluation and criticism  
 
 ---
 
-## 4. Predictive Uncertainty Calibration
+## 🔍 Bayesian Model Criticism
 
-95% credible intervals were computed for predictions.
+The regression notebooks include a detailed model criticism workflow:
 
-### Observations:
+- Posterior Predictive Checks (PPC)
+- Residual analysis
+- Normality checks
+- Predictive uncertainty calibration
+- WAIC / LOO evaluation
 
-* Coverage is not close to the expected 95%
-* Some true values fall outside predicted intervals
-* Indicates **miscalibrated uncertainty**
+### Key insights:
 
-👉 **Conclusion:**
-The model is either overconfident or underconfident in different regions.
-
----
-
-## 5. WAIC / LOO (Out-of-Sample Performance)
-
-Leave-One-Out cross-validation was used to estimate predictive performance.
-
-### Observations:
-
-* LOO reveals variability in predictive accuracy across data points
-* Some observations have high influence (high k-hat values)
-
-👉 **Conclusion:**
-Certain data points are not well explained by the model, indicating **model misspecification**.
+- Linear models fail to capture complex relationships  
+- Residuals show heteroscedasticity and non-linearity  
+- Gaussian likelihood struggles with heavy-tailed data  
+- Predictive uncertainty may be miscalibrated  
 
 ---
 
-## ⚠️ Key Limitations Identified
+## ⚠️ Key Learnings
 
-1. **Linearity assumption is too restrictive**
-2. **Homoscedastic noise assumption is violated**
-3. **Gaussian likelihood does not capture heavy tails**
-4. Model struggles with extreme values and complex interactions
-
----
-
-## 🔧 Potential Improvements
-
-Based on model criticism:
-
-* Introduce **non-linear features** (polynomial terms or splines)
-* Use **heteroscedastic models** (variance as a function of inputs)
-* Replace Gaussian likelihood with **Student-T distribution**
-* Explore **Gaussian Processes** for flexible function modeling
+- Bayesian modeling provides **uncertainty-aware predictions**
+- Model assumptions must be **critically evaluated**
+- Simple models often fail in **real-world settings**
+- Spatial structure is important in many domains (e.g., housing, epidemiology)
 
 ---
 
-## 🧠 Key Takeaway
+## 🔧 Future Work
 
-This project demonstrates that:
-
-> Building a Bayesian model is only the first step —
-> **understanding where it fails is what makes it valuable.**
-
----
-
-## 📁 Future Work
-
-* Extend to hierarchical models
-* Explore spatial modeling (relevant for real estate data)
-* Compare multiple Bayesian models using LOO
+- Non-linear Bayesian models (splines / feature engineering)
+- Heteroscedastic regression
+- Gaussian Processes
+- Hierarchical models
+- **Full BYM2 implementation in PyMC (planned contribution)**
 
 ---
 
-## 🛠️ Tech Stack
+## 🧠 Motivation
 
-* Python
-* PyMC
-* ArviZ
-* NumPy / SciPy / Matplotlib
+This repository is part of my preparation for contributing to **probabilistic programming and Bayesian modeling projects**, particularly in the PyMC ecosystem.
 
 ---
 
 ## 🙌 Acknowledgment
 
-This project is part of my preparation for contributing to Bayesian modeling and probabilistic programming projects.
-
----
+Built as part of my learning journey in Bayesian statistics, probabilistic programming, and open-source contribution.
